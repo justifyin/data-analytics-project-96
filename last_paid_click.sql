@@ -1,4 +1,4 @@
-WITH tab AS (
+WITH last_paid_sessions AS (
     SELECT
         l.visitor_id,
         s.visit_date,
@@ -18,7 +18,7 @@ WITH tab AS (
             s.visitor_id = l.visitor_id
             AND s.visit_date <= l.created_at
     WHERE s.medium IN ('cpc', 'cpm', 'cpa', 'youtube', 'cpp', 'tg', 'social')
-)
+) AS t
 
 SELECT
     visitor_id,
