@@ -18,7 +18,7 @@ WITH last_paid_sessions AS (
             s.visitor_id = l.visitor_id
             AND s.visit_date <= l.created_at
     WHERE s.medium IN ('cpc', 'cpm', 'cpa', 'youtube', 'cpp', 'tg', 'social')
-) AS t
+)
 
 SELECT
     visitor_id,
@@ -31,7 +31,7 @@ SELECT
     amount,
     closing_reason,
     status_id
-FROM t
+FROM last_paid_sessions
 WHERE rn = 1
 ORDER BY
     amount DESC NULLS LAST,
