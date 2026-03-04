@@ -31,7 +31,7 @@ SELECT
     amount,
     closing_reason,
     status_id
-FROM tab
+FROM t
 WHERE rn = 1
 ORDER BY
     amount DESC NULLS LAST,
