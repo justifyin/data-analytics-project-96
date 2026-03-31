@@ -6,8 +6,8 @@ FROM sessions;
 SELECT
     source,
     COUNT(*) AS visits_count,
-    DATE_TRUNC('day', visit_date) as visit_date
-FROM SESSIONS
+    DATE_TRUNC('day', visit_date) AS visit_date
+FROM sessions
 GROUP BY
     source,
     DATE_TRUNC('day', visit_date)
