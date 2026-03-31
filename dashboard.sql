@@ -146,7 +146,10 @@ FROM (
 
     UNION ALL
 
-    SELECT campaign_date, utm_source, daily_spent
+    SELECT
+        campaign_date,
+        utm_source,
+        daily_spent
     FROM ya_ads
 ) AS ads
 GROUP BY
@@ -158,16 +161,22 @@ ORDER BY
 
 /* Расходы по каналам в динамике по неделям */
 SELECT
-    DATE_TRUNC('week', campaign_date) AS spend_week,
     utm_source,
+    DATE_TRUNC('week', campaign_date) AS spend_week,
     SUM(daily_spent) AS total_cost
 FROM (
-    SELECT campaign_date, utm_source, daily_spent
+    SELECT
+        campaign_date,
+        utm_source,
+        daily_spent
     FROM vk_ads
 
     UNION ALL
 
-    SELECT campaign_date, utm_source, daily_spent
+    SELECT
+        campaign_date,
+        utm_source,
+        daily_spent
     FROM ya_ads
 ) AS ads
 GROUP BY
@@ -179,16 +188,22 @@ ORDER BY
 
 /* Расходы по каналам в динамике по месяцам */
 SELECT
-    DATE_TRUNC('month', campaign_date) AS spend_month,
     utm_source,
+    DATE_TRUNC('month', campaign_date) AS spend_month,
     SUM(daily_spent) AS total_cost
 FROM (
-    SELECT campaign_date, utm_source, daily_spent
+    SELECT
+        campaign_date,
+        utm_source,
+        daily_spent
     FROM vk_ads
 
     UNION ALL
 
-    SELECT campaign_date, utm_source, daily_spent
+    SELECT
+        campaign_date,
+        utm_source,
+        daily_spent
     FROM ya_ads
 ) AS ads
 GROUP BY
@@ -322,12 +337,15 @@ SELECT
     ROUND(SUM(total_cost) / NULLIF(SUM(visitors_count), 0), 2) AS cpu,
     ROUND(SUM(total_cost) / NULLIF(SUM(leads_count), 0), 2) AS cpl,
     ROUND(SUM(total_cost) / NULLIF(SUM(purchases_count), 0), 2) AS cppu,
-    ROUND((SUM(revenue) - SUM(total_cost)) / NULLIF(SUM(total_cost), 0) * 100, 2) AS roi
+    ROUND(
+        (SUM(revenue) - SUM(total_cost)) / NULLIF(SUM(total_cost), 0) * 100, 2
+    ) AS roi
 FROM dashboard_final
 GROUP BY utm_source
 ORDER BY roi DESC NULLS LAST;
 
-/* Расчет основных метрик: cpu, cpl, cppu, roi с агрегацией по utm_source, utm_medium, utm_campaign */
+/* Расчет основных метрик: cpu, cpl, cppu, roi
+с агрегацией по utm_source, utm_medium, utm_campaign */
 SELECT
     utm_source,
     utm_medium,
