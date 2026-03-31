@@ -17,8 +17,8 @@ ORDER BY visit_date;
 SELECT
     source,
     COUNT(*) AS visits_count,
-    DATE_TRUNC('week', visit_date) as visit_week
-FROM SESSIONS
+    DATE_TRUNC('week', visit_date) AS visit_week
+FROM sessions
 GROUP BY
     source,
     DATE_TRUNC('week', visit_date)
@@ -28,8 +28,8 @@ ORDER BY visit_week;
 SELECT
     source,
     COUNT(*) AS visits_count,
-    DATE_TRUNC('month', visit_date) as visit_month
-FROM SESSIONS
+    DATE_TRUNC('month', visit_date) AS visit_month
+FROM sessions
 GROUP BY
     source,
     DATE_TRUNC('month', visit_date)
@@ -134,11 +134,14 @@ WHERE rn = 1;
 
 /* Расходы по каналам в динамике по дням */
 SELECT
-    DATE_TRUNC('day', campaign_date) AS spend_date,
     utm_source,
+    DATE_TRUNC('day', campaign_date) AS spend_date,
     SUM(daily_spent) AS total_cost
 FROM (
-    SELECT campaign_date, utm_source, daily_spent
+    SELECT
+        campaign_date,
+        utm_source,
+        daily_spent
     FROM vk_ads
 
     UNION ALL
