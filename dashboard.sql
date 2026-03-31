@@ -96,3 +96,38 @@ GROUP BY DATE_TRUNC('month', created_at)
 ORDER BY DATE_TRUNC('month', created_at);
 
 /* Конверсия из клика в лид и из лида в оплату */
+WITH last_paid_sessions AS (
+    SELECT
+        s.visitor_id,
+        l.lead_id,
+        l.closing_reason,
+        l.status_id,
+        ROW_NUMBER() OVER (
+            PARTITION BY s.visitor_id
+            ORDER BY s.visit_date DESC
+        ) AS rn
+    FROM sessions AS s
+    LEFT JOIN leads AS l
+        ON
+            s.visitor_id = l.visitor_id
+            AND s.visit_date <= l.created_at
+    WHERE s.medium IN ('cpc', 'cpm', 'cpa', 'youtube', 'cpp', 'tg', 'social')
+)
+
+SELECT
+    COUNT(visitor_id) AS clicks_count,
+    COUNT(lead_id) AS leads_count,
+    COUNT(lead_id) FILTER (
+        WHERE closing_reason = 'Успешно реализовано' OR status_id = 142
+    ) AS purchases_count,
+    ROUND(COUNT(lead_id)::numeric / NULLIF(COUNT(visitor_id), 0), 4)
+        AS click_to_lead_conv,
+    ROUND(
+        COUNT(lead_id) FILTER (
+            WHERE closing_reason = 'Успешно реализовано' OR status_id = 142
+        )::numeric
+        / NULLIF(COUNT(lead_id), 0),
+        4
+    ) AS lead_to_purchase_conv
+FROM last_paid_sessions
+WHERE rn = 1;
