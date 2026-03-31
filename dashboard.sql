@@ -323,3 +323,28 @@ SELECT
 FROM dashboard_final
 GROUP BY utm_source
 ORDER BY roi DESC NULLS LAST;
+
+/* Расчет основных метрик: cpu, cpl, cppu, roi с агрегацией по utm_source, utm_medium, utm_campaign */
+SELECT
+    utm_source,
+    utm_medium,
+    utm_campaign,
+    SUM(visitors_count) AS visitors_count,
+    SUM(leads_count) AS leads_count,
+    SUM(purchases_count) AS purchases_count,
+    SUM(revenue) AS revenue,
+    SUM(total_cost) AS total_cost,
+    ROUND(SUM(total_cost) / NULLIF(SUM(visitors_count), 0), 2) AS cpu,
+    ROUND(SUM(total_cost) / NULLIF(SUM(leads_count), 0), 2) AS cpl,
+    ROUND(SUM(total_cost) / NULLIF(SUM(purchases_count), 0), 2) AS cppu,
+    ROUND(
+        (SUM(revenue) - SUM(total_cost)) / NULLIF(SUM(total_cost), 0) * 100,
+        2
+    ) AS roi
+FROM dashboard_final
+GROUP BY
+    utm_source,
+    utm_medium,
+    utm_campaign
+ORDER BY
+    roi DESC NULLS LAST;
