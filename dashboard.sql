@@ -131,3 +131,66 @@ SELECT
     ) AS lead_to_purchase_conv
 FROM last_paid_sessions
 WHERE rn = 1;
+
+/* Расходы по каналам в динамике по дням */
+SELECT
+    DATE_TRUNC('day', campaign_date) AS spend_date,
+    utm_source,
+    SUM(daily_spent) AS total_cost
+FROM (
+    SELECT campaign_date, utm_source, daily_spent
+    FROM vk_ads
+
+    UNION ALL
+
+    SELECT campaign_date, utm_source, daily_spent
+    FROM ya_ads
+) AS ads
+GROUP BY
+    DATE_TRUNC('day', campaign_date),
+    utm_source
+ORDER BY
+    spend_date,
+    utm_source;
+
+/* Расходы по каналам в динамике по неделям */
+SELECT
+    DATE_TRUNC('week', campaign_date) AS spend_week,
+    utm_source,
+    SUM(daily_spent) AS total_cost
+FROM (
+    SELECT campaign_date, utm_source, daily_spent
+    FROM vk_ads
+
+    UNION ALL
+
+    SELECT campaign_date, utm_source, daily_spent
+    FROM ya_ads
+) AS ads
+GROUP BY
+    DATE_TRUNC('week', campaign_date),
+    utm_source
+ORDER BY
+    spend_week,
+    utm_source;
+
+/* Расходы по каналам в динамике по месяцам */
+SELECT
+    DATE_TRUNC('month', campaign_date) AS spend_month,
+    utm_source,
+    SUM(daily_spent) AS total_cost
+FROM (
+    SELECT campaign_date, utm_source, daily_spent
+    FROM vk_ads
+
+    UNION ALL
+
+    SELECT campaign_date, utm_source, daily_spent
+    FROM ya_ads
+) AS ads
+GROUP BY
+    DATE_TRUNC('month', campaign_date),
+    utm_source
+ORDER BY
+    spend_month,
+    utm_source;
