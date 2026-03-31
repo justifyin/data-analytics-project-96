@@ -8,7 +8,9 @@ SELECT
     COUNT(*) AS visits_count,
     DATE_TRUNC('day', visit_date) as visit_date
 FROM SESSIONS
-GROUP BY 1, 3
+GROUP BY
+    source,
+    DATE_TRUNC('day', visit_date)
 ORDER BY visit_date;
 
 /* Каналы, приводящие пользователей по неделям (визиты) */
@@ -17,7 +19,9 @@ SELECT
     COUNT(*) AS visits_count,
     DATE_TRUNC('week', visit_date) as visit_week
 FROM SESSIONS
-GROUP BY 1, 3
+GROUP BY
+    source,
+    DATE_TRUNC('week', visit_date)
 ORDER BY visit_week;
 
 /* Каналы, приводящие пользователей по месяцам (визиты) */
@@ -26,7 +30,9 @@ SELECT
     COUNT(*) AS visits_count,
     DATE_TRUNC('month', visit_date) as visit_month
 FROM SESSIONS
-GROUP BY 1, 3
+GROUP BY
+    source,
+    DATE_TRUNC('month', visit_date)
 ORDER BY visit_month;
 
 /* Каналы, приводящие пользователей по дням (уникальные пользователи) */
