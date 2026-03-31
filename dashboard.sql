@@ -251,7 +251,11 @@ traffic AS (
         utm_campaign,
         COUNT(visitor_id) AS visitors_count
     FROM lpc
-    GROUP BY 1, 2, 3, 4
+    GROUP BY
+        visit_date,
+        utm_source,
+        utm_medium,
+        utm_campaign
 ),
 
 conversions AS (
@@ -270,7 +274,11 @@ conversions AS (
             OR status_id = 142
         ) AS revenue
     FROM lpc
-    GROUP BY 1, 2, 3, 4
+    GROUP BY
+        visit_date,
+        utm_source,
+        utm_medium,
+        utm_campaign
 ),
 
 costs_raw AS (
@@ -299,7 +307,11 @@ costs AS (
         utm_campaign,
         SUM(daily_spent) AS total_cost
     FROM costs_raw
-    GROUP BY 1, 2, 3, 4
+    GROUP BY
+        visit_date,
+        utm_source,
+        utm_medium,
+        utm_campaign
 )
 
 SELECT
