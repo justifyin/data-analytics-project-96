@@ -73,10 +73,26 @@ ORDER BY
 
 /* Приходящие лиды по дням */
 SELECT
-    DATE_TRUNC('day', created_at),
-    COUNT(*)
+    DATE_TRUNC('day', created_at) AS lead_date,
+    COUNT(*) AS leads_count
 FROM leads
-GROUP BY 1
-ORDER BY 1;
+GROUP BY DATE_TRUNC('day', created_at)
+ORDER BY DATE_TRUNC('day', created_at);
+
+/* Приходящие лиды по неделям */
+SELECT
+    DATE_TRUNC('week', created_at) AS lead_week,
+    COUNT(*) AS leads_count
+FROM leads
+GROUP BY DATE_TRUNC('week', created_at)
+ORDER BY DATE_TRUNC('week', created_at);
+
+/* Приходящие лиды по месяцам */
+SELECT
+    DATE_TRUNC('month', created_at) AS lead_month,
+    COUNT(*) AS leads_count
+FROM leads
+GROUP BY DATE_TRUNC('month', created_at)
+ORDER BY DATE_TRUNC('month', created_at);
 
 /* Конверсия из клика в лид и из лида в оплату */
